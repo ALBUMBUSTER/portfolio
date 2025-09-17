@@ -14,8 +14,11 @@
     header {
       text-align: center;
       padding: 40px;
-      background: #4CAF50;
       color: white;
+      background-image: url("bgimage.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
     header img {
       width: 150px;
@@ -45,6 +48,38 @@
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+    /* Skills styling */
+    #skills ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #skills li {
+      background: #4CAF50;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    /* Resume button */
+    .resume-btn {
+      background: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    /* Social links */
+    .social-links a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 18px;
+    }
     footer {
       text-align: center;
       background: #222;
@@ -57,12 +92,12 @@
 <body>
 
   <header>
-    <!-- 👇 Replace "profile.jpg" with your own picture -->
     <img src="anya2.jpeg" alt="Profile Picture">
     <h1>Jason Degorio</h1>
     <p>Software Developer | Web Developer | Newbie</p>
     <nav>
       <a href="#about">About</a>
+      <a href="#skills">Skills</a>
       <a href="#projects">Projects</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -70,7 +105,20 @@
 
   <section id="about">
     <h2>About Me</h2>
-    <p>Hello! I'm Jason, a passionate developer who loves building web applications and solving problems with code.</p>
+    <p>Hello! I'm Jason, a passionate software developer and web developer. I enjoy creating efficient and user-friendly applications. 
+      I'm always eager to learn new technologies and improve my skills.
+    </p>
+  </section>
+
+  <!-- 🔥 New Skills Section -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <ul>
+      <li>HTML</li>
+      <li>CSS</li>
+      <li>JavaScript</li>
+      <li>Python</li>
+    </ul>
   </section>
 
   <section id="projects">
@@ -89,10 +137,31 @@
 
   <section id="contact">
     <h2>Contact</h2>
-    <p>Email: jasondegorio1@gmail.com</p>
-    <p>GitHub: <a href="https://github.com/ALBUMBUSTER" target="_blank">github.com/ALBUMBUSTER</a></p>
-  </section>
+    <p>Email: jasondegorio1@gmail.com</p>    
+    <!-- Resume download -->
+    <p>
+      <a href="resumejason.docx" download class="resume-btn">Download Resume</a>
+    </p>
+    <!-- Social media links with icons -->
+    <!-- Add this inside <head> before </head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+<div class="social-links" style="margin-top: 20px;">
+  <a href="https://web.facebook.com/jason.degorio.50" target="_blank" style="margin: 0 10px; text-decoration: none; color: #4267B2;">
+    <i class="fab fa-facebook"></i> Facebook
+  </a>
+  <a href="https://github.com/ALBUMBUSTER" target="_blank" style="margin: 0 10px; text-decoration: none; color: #333;">
+    <i class="fab fa-github"></i> GitHub
+  </a>
+  <a href="https://www.linkedin.com/in/night-fury-79a9b9282/" target="_blank" style="margin: 0 10px; text-decoration: none; color: #0077b5;">
+    <i class="fab fa-linkedin"></i> LinkedIn
+  </a>
+  <a href="https://x.com/ALBUMBUSTER" target="_blank" style="margin: 0 10px; text-decoration: none; color: #000;">
+    <i class="fa-brands fa-x-twitter"></i> Twitter
+  </a>
+</div>
+
+  </section>
   <footer>
     <p>&copy; 2025 Jason Degorio. All rights reserved.</p>
   </footer>
