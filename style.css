@@ -4,11 +4,10 @@
   --color-black: rgb(46, 38, 24);
 }
 
+/* Reset & Global Styles */
 *,
-*::before,facebook.com
-
+*::before,
 *::after {
-  color: lightblue;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -90,7 +89,6 @@ header {
 }
 
 .sub-nav {
-
   padding-right: 5%;
   display: flex;
   align-items: center;
@@ -131,10 +129,11 @@ header {
   background-color: var(--primary-color);
   padding: 0.5rem 1.5rem;
   margin-top: 4rem;
+  color: var(--color-white);
 }
 
 .description {
-  height: 50vh;
+  height: auto;
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -212,19 +211,61 @@ header {
   cursor: pointer;
 }
 
-@media(max-width:950px) {
+/* ✅ Responsive Styles */
+@media (max-width: 950px) {
+  header {
+    height: auto;
+  }
 
-  .hero-img,
+  .main-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 5%;
+    width: 100%;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .main-nav ul li {
+    margin: 0.5rem 0;
+  }
+
   .sub-nav {
-    display: none;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    padding: 0;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    height: auto;
   }
 
   .content {
     flex: 0 0 100%;
+    padding: 1rem;
+    align-items: center;
   }
 
-  .main-nav {
-    width: 300%;
+  .hero-img {
+    display: block;
+    margin-top: 2rem;
+  }
+
+  .hero-img img {
+    width: 100%;
+    height: auto;
+  }
+
+  .cards,
+  .work {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .contact-form form {
@@ -235,8 +276,9 @@ header {
     flex-direction: column;
   }
 
-  .contact-form .input100,
-  .contact-form .input100 {
+  .input50,
+  .input100 {
     width: 100%;
+    margin: 0.5rem 0;
   }
 }
