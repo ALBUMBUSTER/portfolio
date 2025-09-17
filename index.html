@@ -4,21 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Portfolio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       background: #f4f4f9;
       color: #333;
+      line-height: 1.6;
     }
     header {
       text-align: center;
-      padding: 40px;
+      padding: 60px 20px;
       color: white;
       background-image: url("bgimage.jpg");
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
+      position: relative;
+    }
+    /* Overlay for readability */
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 0;
+    }
+    header * {
+      position: relative;
+      z-index: 1;
     }
     header img {
       width: 150px;
@@ -35,56 +50,92 @@
       color: white;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffd700;
     }
     section {
       padding: 40px;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
     }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #4CAF50;
+    }
+    /* Project cards */
     .project {
       background: white;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    /* Skills styling */
-    #skills ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .project:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
-    #skills li {
+    .project a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+    .project a:hover {
+      color: #2e7d32;
+    }
+    /* Skills with progress bars */
+    .skill-bar {
+      background: #ddd;
+      border-radius: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    .skill-fill {
       background: #4CAF50;
       color: white;
-      padding: 8px 15px;
+      padding: 5px;
+      text-align: center;
       border-radius: 20px;
-      font-weight: bold;
     }
-    /* Resume button */
     .resume-btn {
       background: #4CAF50;
       color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
+      padding: 12px 25px;
+      border-radius: 30px;
       text-decoration: none;
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 15px;
+      transition: background 0.3s;
     }
-    /* Social links */
+    .resume-btn:hover {
+      background: #2e7d32;
+    }
+    .social-links {
+      margin-top: 20px;
+      text-align: left;
+    }
     .social-links a {
-      margin: 0 10px;
+      margin: 0 12px;
+      font-size: 22px;
       text-decoration: none;
-      font-size: 18px;
+      transition: transform 0.3s;
+    }
+    #contact h2 {
+    text-align: left;
+    }
+
+    .social-links a:hover {
+      transform: scale(1.2);
     }
     footer {
       text-align: center;
       background: #222;
       color: white;
-      padding: 15px;
+      padding: 20px;
       margin-top: 30px;
     }
   </style>
@@ -110,15 +161,21 @@
     </p>
   </section>
 
-  <!-- 🔥 New Skills Section -->
+  <!-- Skills with progress bars -->
   <section id="skills">
     <h2>Skills</h2>
-    <ul>
-      <li>HTML</li>
-      <li>CSS</li>
-      <li>JavaScript</li>
-      <li>Python</li>
-    </ul>
+    <div class="skill-bar">
+      <div class="skill-fill" style="width: 90%;">HTML</div>
+    </div>
+    <div class="skill-bar">
+      <div class="skill-fill" style="width: 80%;">CSS</div>
+    </div>
+    <div class="skill-bar">
+      <div class="skill-fill" style="width: 70%;">JavaScript</div>
+    </div>
+    <div class="skill-bar">
+      <div class="skill-fill" style="width: 60%;">Python</div>
+    </div>
   </section>
 
   <section id="projects">
@@ -126,47 +183,38 @@
     <div class="project">
       <h3>Portfolio Website</h3>
       <p>A personal website to showcase my skills and projects. Built with HTML, CSS, and JavaScript.</p>
-      <a href="home.html" target="_blank">View Project</a>
+      <a href="home.html" target="_blank">View Code</a>
     </div>
     <div class="project">
       <h3>Sample Game</h3>
       <p>A simple maze game that is playable to anyone.</p>
-      <a href="game.html" target="_blank">View Game</a>
+      <a href="game.html" target="_blank">View Code</a>
     </div>
   </section>
 
   <section id="contact">
     <h2>Contact</h2>
     <p>Email: jasondegorio1@gmail.com</p>    
-    <!-- Resume download -->
-    <p>
-      <a href="resumejason.docx" download class="resume-btn">Download Resume</a>
-    </p>
-    <!-- Social media links with icons -->
-    <!-- Add this inside <head> before </head> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<div class="social-links" style="margin-top: 20px;">
-  <a href="https://web.facebook.com/jason.degorio.50" target="_blank" style="margin: 0 10px; text-decoration: none; color: #4267B2;">
-    <i class="fab fa-facebook"></i> Facebook
-  </a>
-  <a href="https://github.com/ALBUMBUSTER" target="_blank" style="margin: 0 10px; text-decoration: none; color: #333;">
-    <i class="fab fa-github"></i> GitHub
-  </a>
-  <a href="https://www.linkedin.com/in/night-fury-79a9b9282/" target="_blank" style="margin: 0 10px; text-decoration: none; color: #0077b5;">
-    <i class="fab fa-linkedin"></i> LinkedIn
-  </a>
-  <a href="https://x.com/ALBUMBUSTER" target="_blank" style="margin: 0 10px; text-decoration: none; color: #000;">
-    <i class="fa-brands fa-x-twitter"></i> Twitter
-  </a>
-</div>
-
+    <a href="resumejason.docx" download class="resume-btn">Download Resume</a>
+    <div class="social-links">
+      <a href="https://web.facebook.com/jason.degorio.50" target="_blank" style="color: #4267B2;">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://github.com/ALBUMBUSTER" target="_blank" style="color: #333;">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/night-fury-79a9b9282/" target="_blank" style="color: #0077b5;">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://x.com/ALBUMBUSTER" target="_blank" style="color: #000;">
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+    </div>
   </section>
+
   <footer>
     <p>&copy; 2025 Jason Degorio. All rights reserved.</p>
   </footer>
 
 </body>
 </html>
-
-
