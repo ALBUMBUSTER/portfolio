@@ -1,24 +1,324 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Maze Game</title>
-    <link rel="stylesheet" href="gamedesign.css">
+  <meta charset="UTF-8">
+  <title>Maze Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e0e0, #ffffff);
+    }
+    #game-container {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      margin: 40px auto;
+      border: 3px solid #333;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
+      background-color: #f9f9f9;
+    }
+    #maze {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background-color: #ddd;
+    }
+    #player {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      border-radius: 4px;
+    }
+    #goal {
+      width: 30px;
+      height: 30px;
+      background-color: green;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      border-radius: 50%;
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #0f0; }
+      to { box-shadow: 0 0 20px #0f0; }
+    }
+    .wall {
+      background-color: black;
+      position: absolute;
+      border-radius: 3px;
+    }
+    #game-over, #win-screen {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 25px;
+      text-align: center;
+      border-radius: 8px;
+      display: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 8px;
+      border: none;
+      border-radius: 5px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #ccc;
+    }
+    #level-indicator {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="maze"></div>
-        <div id="player"></div>
-        <div id="goal"></div>
-        <div id="game-over" style="display: none;">
-            <h1>Game Over!</h1>
-            <button id="try-again">Try Again</button>
-        </div>
-        <div id="win-screen" style="display: none;">
-            <h1>You Win!</h1>
-            <button id="win-ok">OK</button>
-            <button id="next-level">Next Level</button>
-        </div>
+  <div id="game-container">
+    <div id="maze"></div>
+    <div id="player"></div>
+    <div id="goal"></div>
+    <div id="level-indicator"></div>
+
+    <div id="game-over">
+      <h1>Game Over!</h1>
+      <button id="try-again">Try Again</button>
     </div>
-    <script src="script.js"></script>
+
+    <div id="win-screen">
+      <h1>You Win!</h1>
+      <button id="win-ok">OK</button>
+      <button id="next-level">Next Level</button>
+    </div>
+  </div>
+
+  <script>
+    const player = document.getElementById("player");
+    const goal = document.getElementById("goal");
+    const maze = document.getElementById("maze");
+    const gameOver = document.getElementById("game-over");
+    const winScreen = document.getElementById("win-screen");
+    const tryAgainBtn = document.getElementById("try-again");
+    const winOkBtn = document.getElementById("win-ok");
+    const nextLevelBtn = document.getElementById("next-level");
+    const levelIndicator = document.getElementById("level-indicator");
+
+    let level = 1;
+    let speed = 5;
+
+    // Predefined levels with guaranteed paths
+    const levels = [
+      // Level 1
+      [
+        {top: 60, left: 50, width: 350, height: 10},
+        {top: 150, left: 100, width: 10, height: 250},
+        {top: 300, left: 200, width: 250, height: 10},
+        {top: 100, left: 350, width: 10, height: 200},
+        {top: 400, left: 50, width: 400, height: 10},
+      ],
+      // Level 2
+      [
+        {top: 50, left: 50, width: 400, height: 10},
+        {top: 120, left: 100, width: 10, height: 300},
+        {top: 200, left: 50, width: 300, height: 10},
+        {top: 250, left: 350, width: 10, height: 200},
+        {top: 350, left: 150, width: 250, height: 10},
+        {top: 430, left: 50, width: 400, height: 10},
+      ],
+      // Level 3
+      [
+        {top: 70, left: 50, width: 380, height: 10},
+        {top: 130, left: 150, width: 10, height: 300},
+        {top: 180, left: 50, width: 280, height: 10},
+        {top: 250, left: 300, width: 10, height: 200},
+        {top: 300, left: 100, width: 250, height: 10},
+        {top: 380, left: 200, width: 250, height: 10},
+        {top: 450, left: 50, width: 400, height: 10},
+      ],
+      // Level 4
+      [
+        {top: 60, left: 50, width: 380, height: 10},
+        {top: 120, left: 120, width: 10, height: 280},
+        {top: 180, left: 50, width: 280, height: 10},
+        {top: 240, left: 300, width: 10, height: 220},
+        {top: 300, left: 150, width: 200, height: 10},
+        {top: 350, left: 200, width: 250, height: 10},
+        {top: 420, left: 100, width: 300, height: 10},
+        {top: 460, left: 50, width: 400, height: 10},
+      ],
+      // Level 5
+      [
+        {top: 40, left: 50, width: 400, height: 10},
+        {top: 100, left: 150, width: 10, height: 350},
+        {top: 160, left: 50, width: 280, height: 10},
+        {top: 220, left: 300, width: 10, height: 200},
+        {top: 280, left: 100, width: 250, height: 10},
+        {top: 340, left: 200, width: 250, height: 10},
+        {top: 390, left: 120, width: 200, height: 10},
+        {top: 440, left: 50, width: 400, height: 10},
+        {top: 200, left: 400, width: 10, height: 200},
+      ],
+      // Level 6 (fixed to be winnable)
+      [
+        {top: 50, left: 60, width: 380, height: 10},
+        {top: 120, left: 100, width: 10, height: 300},
+        {top: 180, left: 50, width: 300, height: 10},
+        {top: 250, left: 300, width: 10, height: 220},
+        {top: 310, left: 150, width: 200, height: 10},
+        {top: 370, left: 220, width: 250, height: 10},
+        {top: 430, left: 60, width: 400, height: 10},
+        {top: 220, left: 400, width: 10, height: 200},
+        {top: 280, left: 180, width: 10, height: 100},
+        {top: 340, left: 120, width: 80, height: 10},
+      ],
+      // Level 7
+      [
+        {top: 60, left: 50, width: 400, height: 10},
+        {top: 120, left: 200, width: 10, height: 300},
+        {top: 200, left: 50, width: 300, height: 10},
+        {top: 260, left: 100, width: 10, height: 200},
+        {top: 320, left: 150, width: 300, height: 10},
+        {top: 380, left: 250, width: 10, height: 100},
+        {top: 420, left: 50, width: 400, height: 10},
+      ],
+      // Level 8
+      [
+        {top: 50, left: 50, width: 400, height: 10},
+        {top: 120, left: 120, width: 10, height: 320},
+        {top: 180, left: 50, width: 250, height: 10},
+        {top: 250, left: 300, width: 10, height: 200},
+        {top: 310, left: 150, width: 250, height: 10},
+        {top: 370, left: 200, width: 200, height: 10},
+        {top: 430, left: 50, width: 400, height: 10},
+      ],
+      // Level 9
+      [
+        {top: 70, left: 50, width: 380, height: 10},
+        {top: 130, left: 150, width: 10, height: 300},
+        {top: 200, left: 50, width: 280, height: 10},
+        {top: 260, left: 300, width: 10, height: 220},
+        {top: 320, left: 100, width: 250, height: 10},
+        {top: 380, left: 200, width: 250, height: 10},
+        {top: 440, left: 50, width: 400, height: 10},
+      ],
+      // Level 10
+      [
+        {top: 40, left: 50, width: 400, height: 10},
+        {top: 100, left: 100, width: 10, height: 350},
+        {top: 160, left: 150, width: 250, height: 10},
+        {top: 220, left: 350, width: 10, height: 200},
+        {top: 280, left: 200, width: 200, height: 10},
+        {top: 340, left: 120, width: 250, height: 10},
+        {top: 400, left: 50, width: 400, height: 10},
+        {top: 200, left: 250, width: 10, height: 200},
+      ],
+    ];
+
+    function createMaze(level) {
+      maze.innerHTML = "";
+      const walls = levels[level - 1];
+      walls.forEach(w => {
+        const wall = document.createElement("div");
+        wall.className = "wall";
+        wall.style.top = w.top + "px";
+        wall.style.left = w.left + "px";
+        wall.style.width = w.width + "px";
+        wall.style.height = w.height + "px";
+        maze.appendChild(wall);
+      });
+      levelIndicator.textContent = `Level ${level}/10`;
+    }
+
+    function resetPlayer() {
+      player.style.top = "10px";
+      player.style.left = "10px";
+    }
+
+    function checkCollision(rect1, rect2) {
+      return !(
+        rect1.top > rect2.bottom ||
+        rect1.bottom < rect2.top ||
+        rect1.right < rect2.left ||
+        rect1.left > rect2.right
+      );
+    }
+
+    function movePlayer(dx, dy) {
+      const containerRect = maze.getBoundingClientRect();
+      let newTop = player.offsetTop + dy;
+      let newLeft = player.offsetLeft + dx;
+
+      if (newTop < 0 || newTop + player.offsetHeight > containerRect.height) return;
+      if (newLeft < 0 || newLeft + player.offsetWidth > containerRect.width) return;
+
+      player.style.top = newTop + "px";
+      player.style.left = newLeft + "px";
+
+      const walls = document.querySelectorAll(".wall");
+      for (let wall of walls) {
+        if (checkCollision(player.getBoundingClientRect(), wall.getBoundingClientRect())) {
+          gameOver.style.display = "block";
+          return;
+        }
+      }
+
+      if (checkCollision(player.getBoundingClientRect(), goal.getBoundingClientRect())) {
+        winScreen.style.display = "block";
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (gameOver.style.display === "block" || winScreen.style.display === "block") return;
+      if (e.key === "ArrowUp" || e.key === "w") movePlayer(0, -speed);
+      if (e.key === "ArrowDown" || e.key === "s") movePlayer(0, speed);
+      if (e.key === "ArrowLeft" || e.key === "a") movePlayer(-speed, 0);
+      if (e.key === "ArrowRight" || e.key === "d") movePlayer(speed, 0);
+    });
+
+    tryAgainBtn.addEventListener("click", () => {
+      gameOver.style.display = "none";
+      resetPlayer();
+    });
+
+    winOkBtn.addEventListener("click", () => {
+      winScreen.style.display = "none";
+      resetPlayer();
+    });
+
+    nextLevelBtn.addEventListener("click", () => {
+      winScreen.style.display = "none";
+      if (level < levels.length) {
+        level++;
+        speed += 0.3;
+        createMaze(level);
+        resetPlayer();
+      } else {
+        alert("🎉 Congrats! You finished all 10 levels!");
+        level = 1;
+        createMaze(level);
+        resetPlayer();
+      }
+    });
+
+    // Init
+    createMaze(level);
+    resetPlayer();
+  </script>
 </body>
 </html>
